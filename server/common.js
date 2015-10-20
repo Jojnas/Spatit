@@ -1,3 +1,7 @@
-/**
- * Created by User1 on 10/5/2015.
- */
+Meteor.publish('products', function(){
+    return Products.find();
+});
+
+Meteor.publish('categories', function(){
+    return Categories.find();
+});

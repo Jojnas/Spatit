@@ -1,6 +1,6 @@
 Template.add_product.events({
 
-    "submit .add_product": function(event){
+    "submit .add_product": function (event) {
 
         var name = event.target.name.value;
         var category = event.target.category.value;
@@ -9,52 +9,17 @@ Template.add_product.events({
 
         var file = $('#productImage').get(0).files[0];
 
-        if(file) {
-            fsFile = new FS.File(file);
+        Meteor.call('addProduct', file, name, category, description, is_featured)
 
-            ProductsImages.insert(fsFile, function (err, result) {
+        // Clear form
+        event.target.name.value = "";
+        event.target.category.value = "";
+        event.target.description.value = "";
+        event.target.is_featured.value = "";
 
-                if (!err) {
-                    var productImage = '/cfs/files/ProductImages/' + result._id;
+        FlashMessages.sendSuccess("Product added");
+        Router.go('/');
 
-
-                    Products.insert({
-                        name: name,
-                        category: category,
-                        description: description,
-                        is_featured: is_featured,
-                        image: productImage,
-                        createdAt: new Date()
-                    });
-
-                }
-            });
-
-
-        } else
-            {
-                var productImage = '/img/noimage.png';
-
-
-                Products.insert({
-                    name: name,
-                    category: category,
-                    description: description,
-                    is_featured: is_featured,
-                    image: productImage,
-                    createdAt: new Date()
-                });
-            }
-
-            // Clear form
-            event.target.name.value = "";
-            event.target.category.value = "";
-            event.target.description.value = "";
-            event.target.is_featured.value = "";
-
-            FlashMessages.sendSuccess("Product added");
-            Router.go('/');
-
-            event.preventDefault();
-        }
-    });
+        event.preventDefault();
+    }
+});
