@@ -5,7 +5,7 @@ Template.new_review.events({
         var rating = event.target.rating.value;
         var body = event.target.body.value;
 
-        Meteor.call('addReview', this_id, rating, body);
+        Meteor.call('addReview', this._id, rating, body);
 
         FlashMessages.sendSuccess('Review added');
         Router.go('/');
